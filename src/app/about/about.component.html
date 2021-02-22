@@ -68,17 +68,10 @@
           
         
         
-    </mat-grid-tile>
-        <!--mat-list-item *ngFor="let leader of leaders">  
-            
-          <p mat-line style="display:inline;">
-            <img height="50px" src={{leader.image}} alt={{leader.name}}>
-            <span>{{leader.name}}</span>
-            <span>{{leader.abbr}}</span>
-            <span>{{leader.description}}</span>
-            
-          </p>
-        </mat-list-item-->
+      </mat-grid-tile>
     </mat-grid-list>
+    <div [hidden]="leaders">
+      <mat-spinner></mat-spinner><h4>Loading . . . Please Wait </h4>
+    </div>
   </div>
 </div>
