@@ -49,7 +49,40 @@
             </p>
             
         </mat-list-item>
+        <mat-list-item>
+            <p mat-line ><span [hidden]="!commentForm.valid">{{ commentForm.value.comment}}</span></p>
+            <p mat-line><span>{{ commentForm.value.rating}} Stars</span></p>
+            <p mat-line><span [hidden]="!commentForm.valid">--{{ commentForm.value.author}}</span></p>
+        </mat-list-item>
     </mat-list>
+
+    <!--p mat-line>
+        <span>{{ commentForm.status | json}}</span>>
+    </p-->
+    <!--p mat-line><span>{{ commentForm.value | json }}</span>></p-->
+    
+
+    <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit)="onSubmit()">
+        <p>
+            <mat-form-field class="half-width">
+                <input matInput formControlName="author" placeholder="Name" type="text" required>
+                <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
+                <!--mat-error *ngIf="commentForm.get('author').hasError('required')&& commentForm.get('author').touched">Name is required</mat-error-->
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-slider thumbLabel tickInterval="1" min="1" max="5" step="1" formControlName="rating"></mat-slider>     
+        </p>
+        <p>
+            <mat-form-field class="half-width">
+                <input matInput formControlName="comment" placeholder="Comment" type="text" required>
+                <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
+                <!--mat-error *ngIf="commentForm.get('comment').hasError('required')&& commentForm.get('comment').touched">Comment is required</mat-error-->
+            </mat-form-field>
+        </p>
+        <button type="submit" [disabled]="!commentForm.valid" mat-button class="background-primary text-floral-white">Submit</button>
+
+    </form>
   </div>
 
   <div fxFlex [hidden]="dish">
