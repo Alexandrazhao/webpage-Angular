@@ -59,7 +59,7 @@
     
     <mat-grid-list cols="1" rowHeight=100>
       <mat-grid-tile *ngFor="let leader of leaders" [routerLink]="['/leaderdetail', leader.id]">
-        <img height="100px" src={{leader.image}} alt={{leader.name}}>
+        <img height="100px" src="{{ BaseURL + leader.image}}" alt={{leader.name}}>
           <p mat-line>
             <span> {{leader.name}} </span><br>
             <span>{{leader.abbr}}</span><br>
@@ -70,8 +70,13 @@
         
       </mat-grid-tile>
     </mat-grid-list>
-    <div [hidden]="leaders">
+    <div [hidden]="leaders || leaderErrMess">
       <mat-spinner></mat-spinner><h4>Loading . . . Please Wait </h4>
     </div>
+    <div fxFlex *ngIf="leaderErrMess">
+      <h2>Error</h2>
+      <h4>{{leaderErrMess}}</h4>
+    </div>
+
   </div>
 </div>

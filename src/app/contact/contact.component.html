@@ -88,4 +88,18 @@
       [disabled]="feedbackForm.invalid">Submit</button>
     </form>
   </div>
+
+  <div [hidden] = "showFeedbackForm || feedbackcopy" [@expand]>
+    <mat-spinner></mat-spinner><h4>Loading.... Please Wait</h4>
+  </div>
+  <div class="flex" *ngIf="feedbackcopy" [@expand]>
+    <h3>Your submission</h3>
+    <p>First Name: {{feedbackcopy.firstname}}</p>
+    <p>Last Name: {{feedbackcopy.lastname}}</p>
+    <p>Tel.number: {{feedbackcopy.telnum}}</p>
+    <p>Email: {{feedbackcopy.email}}</p>
+    <p>Contact you? : {{feedbackcopy.agree}}</p>
+    <p>How?: {{feedbackcopy.contacttype}}</p>
+    <p>Feedback: {{feedbackcopy.message}}</p>
+  </div>
 </div>

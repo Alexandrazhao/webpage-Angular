@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Params, ActivatedRoute } from '@angular/router';
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animation';
+import { flyInOut, visibility, expand } from '../animations/app.animation';
+import { switchMap } from 'rxjs/operators';
+import { FeedbackService } from '../services/feedback.service';
+import { baseURL } from '../shared/baseurl';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -11,7 +15,9 @@ import { flyInOut } from '../animations/app.animation';
     'style': 'display:block;'
   },
   animations:[
-    flyInOut()
+    flyInOut(),
+    visibility(),
+    expand(),
   ]
 })
 export class ContactComponent implements OnInit {
@@ -19,6 +25,12 @@ export class ContactComponent implements OnInit {
   feedbackForm: FormGroup;
   feedback: Feedback;
   contactType = ContactType;
+  //dishcopy: Dish;
+  feedbackcopy : Feedback = null;
+  
+  showSpinner = false;
+  showFeedbackForm = true;
+  showFeedback = false;
   @ViewChild('fform') feedbackFormDirective;
 
   formErrors = {
@@ -49,11 +61,13 @@ export class ContactComponent implements OnInit {
     }
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private feedbackservice: FeedbackService,
+    private route: ActivatedRoute) {
     this.createForm();
    }
 
   ngOnInit(): void {
+
   }
   createForm(){
     this.feedbackForm = this.fb.group({
@@ -95,6 +109,22 @@ export class ContactComponent implements OnInit {
   onSubmit(){
     this.feedback=this.feedbackForm.value;
     console.log(this.feedback);
+    /*
+    this.feedbackservice
+      .submitFeedback(this.feedbackcopy)
+      .subscribe(feedback => this.feedbackForm.value.push(feedback));
+    */
+    this.showFeedbackForm = false;
+    this.feedbackservice
+      .submitFeedback(this.feedback)
+      .subscribe(feedback => {
+        this.feedbackcopy = feedback; this.feedback = null;
+        setTimeout(()=>{
+          this.feedbackcopy = null; this.showFeedbackForm = true
+        }, 5000);
+      },
+      error => console.log(error.status, error.message)
+      ); 
     this.feedbackForm.reset({
       firstname:'',
       lastname:'',
